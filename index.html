@@ -8,16 +8,10 @@
   <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+
 </head>
 <body>
   <div id="root"></div>
-
-  <script type="text/babel">
-    const { useEffect, useState } = React;
-    const Hello = ({msg}) => {
-      return <h1>{msg}</h1>
-    }
-    ReactDOM.createRoot(document.getElementById('root')).render(<Hello msg="Hello World!"/>);
-  </script>
+  <script type="text/babel" src="./src/index.js"></script>
 </body>
 </html
