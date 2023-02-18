@@ -15,11 +15,16 @@ const Accordion = ({item}) => {
   )
 }
 
-// const Accordion = ({items}) => {
-//   return (
-//     items.map(item => <Panel item={item} key={item.id}/>)
-//   )
-// }
+Accordion.propTypes = {
+  item: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string,
+    website: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+  })
+}
+
 
 const Layout = () => {
   const [users, setUsers] = useState([])
@@ -52,7 +57,7 @@ const Layout = () => {
         value={inputValue}
       />
       <button onClick={handleBtnClick}>go</button>
-      { users.map(item => <Accordion item={item}/>) }
+      { users.map(item => <Accordion item={item} key={item.id} notChecked='someprop'/>) }
     </>
   )
 }
