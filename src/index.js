@@ -1,11 +1,24 @@
-const { useEffect, useState, useRef } = React;
+const { useEffect, useState, useRef } = React
 
-const Accordion = ({item}) => {
+const Accordion = ({item, titleStyle, itemStyle, ...otherProps}) => {
   const [show, setShow] = useState(false)
+  
+  // Default styles
+  const defaultTitleStyles = {padding: '2px', margin: '0', backgroundColor: 'gray'}
+  const getDefaultItemStyles = show => ({ 
+    height: show ? '80px' : '0px', 
+    overflowY: 'hidden', 
+    transition: 'height 0.2s linear' 
+  })
+  
   return (
-    <div>
-      <h1 onClick={() => setShow(!show)} style={{padding: '2px', margin: '0', backgroundColor: 'gray'}}>{item.name}</h1>
-      <div style={{height: show ? '80px' : '0px', overflowY: 'hidden', transition: 'height 0.2s linear'}}>
+    <div {...otherProps}>
+      <h1 
+        onClick={() => setShow(!show)}
+        style={{...defaultTitleStyles, ...titleStyle}}>
+          {item.name}
+      </h1>
+      <div style={{...getDefaultItemStyles(show), ...itemStyle}}>
         <li>{item.username}</li>
         <li>{item.website}</li>
         <li>{item.email}</li>
@@ -57,7 +70,7 @@ const Layout = () => {
         value={inputValue}
       />
       <button onClick={handleBtnClick}>go</button>
-      { users.map(item => <Accordion item={item} key={item.id} notChecked='someprop'/>) }
+      { users.map(item => <Accordion item={item} key={item.id} titleStyle={{backgroundColor: 'blue'}} className='accordion'/>) }
     </>
   )
 }
