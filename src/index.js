@@ -1,28 +1,32 @@
 const { useEffect, useState, useRef } = React
 
-const Accordion = ({item, titleStyle, itemStyle, ...otherProps}) => {
+const Accordion = ({title, titleStyle, itemStyle, children, ...otherProps}) => {
   const [show, setShow] = useState(false)
+  const backgroundColor = '#DCC7AA';
+  const fontColor = '#6B7A8F'
   
   // Default styles
-  const defaultTitleStyles = {padding: '2px', margin: '0', backgroundColor: 'gray'}
+  const defaultTitleStyles = {margin: '0', padding: '.5rem', backgroundColor, color: fontColor}
   const getDefaultItemStyles = show => ({ 
-    height: show ? '80px' : '0px', 
+    height: show ? 'fit-content' : '0px', 
+    border: show ? `2px solid ${backgroundColor}` : '0px', 
     overflowY: 'hidden', 
-    transition: 'height 0.2s linear' 
+    transition: 'height 0.2s linear',
+    margin: '0',
+    color: fontColor,
   })
   
   return (
-    <div {...otherProps}>
-      <h1 
+    <div style={{maxWidth: '25%', marginBottom: '1px'}} {...otherProps} >
+      <h3 
         onClick={() => setShow(!show)}
         style={{...defaultTitleStyles, ...titleStyle}}>
-          {item.name}
-      </h1>
+          {title}
+      </h3>
       <div style={{...getDefaultItemStyles(show), ...itemStyle}}>
-        <li>{item.username}</li>
-        <li>{item.website}</li>
-        <li>{item.email}</li>
-        <li>{item.phone}</li>
+        <div style={{padding: '.5rem'}}>
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -38,9 +42,8 @@ Accordion.propTypes = {
   })
 }
 
-
 const Layout = () => {
-  const [users, setUsers] = useState([])
+  const [posts, setPosts] = useState([])
   const [inputValue, setInputValue] = useState("")
   const inputRef = useRef(null)
 
@@ -53,15 +56,27 @@ const Layout = () => {
   }
 
   const handleBtnClick = async () => {
-    const response = await fetch('https://jsonplaceholder.typicode.com/users')
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts')
     const data = await response.json()
-    setUsers(data)
+    setPosts(data)
   }
+
+  useEffect(() => {
+    const doit = async () => {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+    const data = await response.json()
+    setPosts(data)
+    }
+
+    doit()
+
+  }, )
 
   return (
     <>
-      <h3>Enter the number of users you would like to see</h3>
-      <input 
+      <label htmlFor="no-items-input" style={{display: 'block'}}>Enter the number of users you would like to see</label>
+      <input
+        id="no-items-input"
         type="number" 
         max={10}
         ref={inputRef} 
@@ -70,7 +85,11 @@ const Layout = () => {
         value={inputValue}
       />
       <button onClick={handleBtnClick}>go</button>
-      { users.map(item => <Accordion item={item} key={item.id} titleStyle={{backgroundColor: 'blue'}} className='accordion'/>) }
+      { posts.map(item =>
+        <Accordion title={item.title} key={item.id} className='accordion'>
+          <p>{item.body}</p>
+        </Accordion>
+      )}
     </>
   )
 }
