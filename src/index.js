@@ -25,6 +25,7 @@ const Accordion = ({
 		overflowY: "hidden",
 		transition: "height 0.2s linear",
 		margin: "0",
+		padding: show ? "1rem" : 0,
 		color: fontColor,
 	});
 
@@ -37,7 +38,7 @@ const Accordion = ({
 				{title}
 			</h3>
 			<div style={{ ...getDefaultItemStyles(show), ...itemStyle }}>
-				<div style={{ padding: ".5rem" }}>{children}</div>
+				{children}
 			</div>
 		</div>
 	);
@@ -65,8 +66,8 @@ const Layout = () => {
 	}, []);
 
 	const handleInputChange = (e) => {
-		const value =
-			e.target.value >= 0 && e.target.value <= 10 ? e.target.value : 0;
+		const value = e.target.value;
+		if (value > 10) return;
 		setInputValue(value);
 	};
 
@@ -80,14 +81,14 @@ const Layout = () => {
 	return (
 		<>
 			<label htmlFor="no-items-input" style={{ display: "block" }}>
-				Enter the number of users you would like to see
+				Enter the number of users you would like to see between 1-10
 			</label>
 			<input
 				id="no-items-input"
 				type="number"
 				max={10}
 				ref={inputRef}
-				placeholder="must be equal or less than 10"
+				// placeholder="must be equal or less than 10"
 				onChange={handleInputChange}
 				value={inputValue}
 			/>
